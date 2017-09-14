@@ -17,6 +17,8 @@ var restaurantSchema = new mongoose.Schema({
         shape: { type: String, enum: ['rectangular', 'circular'], default: 'circular' }
     }],
 
+    cuisine: [String],
+
     // for reviews we have separate collection
     // its good to store avg rating and review count on restaurant schema itself
     // it will reduse the db calls to get reviews data from Reviews Collection
