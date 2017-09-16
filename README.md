@@ -1,7 +1,7 @@
 # Table Booking
 ----------
 > Software required
-1. Nodejs [Download](https://nodejs.org/en/download/)
+1. Nodejs **(Version 8.0 or greater)** [Download](https://nodejs.org/en/download/)
 2. MongoDB [Download](https://www.mongodb.com/download-center?jmp=nav#atlas)
 
 > Clone Repo
