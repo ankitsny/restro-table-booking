@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var bookingSchema = new mongoose.Schema({
     restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
-    tableId: { type: mongoose.Types.ObjectId },
+    tableId: { type: mongoose.Schema.Types.ObjectId },
     bookedOn: { type: Date, default: Date.now },
     startTime: Date,
     endTime: Date,

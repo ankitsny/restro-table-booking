@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var reviewSchema = new mongoose.Schema({
     reviewedOn: { type: Date, default: Date.now },                              // Review Date
     restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },  // RestaurantId, 
-    tableId: { type: mongoose.Types.ObjectId },                                 // TableId, optional, good to have for analytics
+    tableId: { type: mongoose.Schema.Types.ObjectId },                          // TableId, optional, good to have for analytics
 
     stars: Number,                                                              // Number of stars
     reviewText: String,                                                         // Users feedback
