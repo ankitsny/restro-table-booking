@@ -8,6 +8,10 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var restaurant = require('./routes/restaurant.routes');
+var booking = require('./routes/booking.routes');
+var review = require('./routes/review.routes');
+
 var app = express();
 
 // view engine setup
@@ -22,8 +26,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// Routes
 app.use('/', index);
 app.use('/users', users);
+app.use('/restaurant', restaurant);
+app.use('/booking', booking);
+app.use('/review', review);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
