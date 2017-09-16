@@ -1,22 +1,22 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var bookingSchema = new mongoose.Schema({
-    restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
-    tableId: { type: mongoose.Schema.Types.ObjectId },
-    bookedOn: { type: Date, default: Date.now },
-    startTime: Date,
-    endTime: Date,
+const bookingSchema = new mongoose.Schema({
+  restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' },
+  tableId: { type: mongoose.Schema.Types.ObjectId },
+  bookedOn: { type: Date, default: Date.now },
+  startTime: Date,
+  endTime: Date,
 
-    bookingStatus: { type: String, enum: ['CONFIRMED', 'CANCELLED', 'BLOCKED'] },
+  bookingStatus: { type: String, enum: ['CONFIRMED', 'CANCELLED', 'BLOCKED'] },
 
-    // Users details
-    name: String,
-    email: String,
-    phone: Number,
+  // Users details
+  name: String,
+  email: String,
+  phone: Number,
 
-    // store userId 
-    // INFO: skip it for now
-    // userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+  // store userId
+  // INFO: skip it for now
+  // userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 
 });
 
