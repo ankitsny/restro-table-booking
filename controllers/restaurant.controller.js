@@ -56,3 +56,45 @@ exports.deleteRestaurant = async (req, res) => {
       return res.status(204).send({ message: 'Deleted' });
     });
 };
+
+
+// controlleres for tables sub-document
+async function getTables(id, tId) {
+  try {
+    const condn = { _id: id };
+    if (tId) condn['tables._id'] = tId;
+    const restaurant = await Restaurant
+      .findOne(condn)
+      .select('tables')
+      .exec();
+
+    if (!restaurant || !restaurant.tables.length) { return { err: new Error('Table not found') }; }
+    if (tId && !restaurant.tables.$) return { err: new Error('Invalid Table') };
+    return { err: null, tables: tId ? restaurant.tables.$ : restaurant.tables };
+  } catch (err) {
+    return { err };
+  }
+}
+
+
+exports.getTables = async (req, res) => {
+  const { err, tables } = await getTables(req.params.id, req.params.tId || null);
+  if (err) return res.status(500).send({ err });
+  return res.status(200).send({ tables });
+};
+
+exports.postTables = async (req, res) => {
+
+};
+
+exports.putTables = async (req, res) => {
+
+};
+
+exports.patchTables = async (req, res) => {
+
+};
+
+exports.deleteTables = async (req, res) => {
+
+};

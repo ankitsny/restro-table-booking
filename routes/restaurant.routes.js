@@ -13,7 +13,7 @@ router
 
 router
   .route('/id/tables/tId?')
-  .get((req, res) => res.status(200).send('get'))
+  .get(restaurantController.getTables)
   .post((req, res) => res.status(200).send('post'))
   .put((req, res) => res.status(200).send('put'))
   .patch((req, res) => res.status(200).send('patch'))
