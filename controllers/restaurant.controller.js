@@ -1,8 +1,24 @@
 const Restaurant = require('../dbSchema/Restautant');
 
-async function getRestaurants(id) {
+async function getRestaurants(id, query) {
   try {
-    const restaurant = id ? await Restaurant.findById(id).exec() : await Restaurant.find().exec();
+    let restaurant;
+    if (!query) {
+      restaurant = id ? await Restaurant.findById(id).exec() : await Restaurant.find().exec();
+    } else {
+      // WARNING: text index not working properly
+      // https://stackoverflow.com/questions/46288384/text-indexes-mongodb-minimum-length-of-search-string
+      // db.restaurants.ensureIndex({name:'text',cusines:'text','address.city':'text',
+      //  'address.zipCode':'text'})
+      restaurant = await Restaurant.find(
+        {
+          $text: { $search: query, $caseSensitive: false },
+        },
+        {
+          score: { $meta: 'textScore' },
+        },
+      ).exec();
+    }
     return { err: null, restaurant };
   } catch (err) {
     return { err };
@@ -13,10 +29,10 @@ exports.getRestaurants = async (req, res) => {
   // INFO: if id is passed then this function will return one doc
   // if id is not passed then it will return array of docs/restaurant
   // TODO: Implement pagination for second case
-  const { err, restaurant } = await getRestaurants(req.params.id);
+  const { err, restaurant } = await getRestaurants(req.params.id, req.query.search);
   if (err) return res.status(500).send({ err });
   if (!restaurant) return res.status(404).send({ message: 'Invalid id' });
-  return res.status(200).send(restaurant);
+  return res.status(200).send({ restaurant });
 };
 
 exports.postRestaurant = async (req, res) => {
@@ -99,10 +115,10 @@ exports.postTables = async (req, res) => {
   if (req.body && !Array.isArray(req.body)) req.body = [req.body];
   Restaurant
     .findByIdAndUpdate(
-      req.params.id,
-      { $push: { tables: { $each: req.body } } },
-      { new: true },
-    )
+    req.params.id,
+    { $push: { tables: { $each: req.body } } },
+    { new: true },
+  )
     .exec((err, restaurant) => {
       if (err) return res.status(500).send({ err });
       if (!restaurant) return res.status(404).send({ message: 'Invalid Restaurant' });
@@ -114,13 +130,13 @@ exports.putTables = async (req, res) => {
   // TODO: verify all incoming data
   Restaurant
     .findOneAndUpdate(
-      { _id: req.params.id, 'tables._id': req.params.tId },
-      { 'tables.$': req.body },
-      { new: true },
-    )
+    { _id: req.params.id, 'tables._id': req.params.tId },
+    { 'tables.$': req.body },
+    { new: true },
+  )
     .exec((err, restaurant) => {
       if (err) return res.status(500).send({ err });
-      if (!restaurant) return res.status(404).send({ message: 'Invalid restauranr or table' });
+      if (!restaurant) return res.status(404).send({ message: 'Invalid restaurant or table' });
       return res.status(200).send({ restaurant });
     });
 };
@@ -130,23 +146,23 @@ exports.patchTables = async (req, res) => {
 
   Restaurant
     .findOneAndUpdate(
-      { _id: req.params.id, 'tables._id': req.params.tId },
-      { 'tables.$': req.body },
-      { new: true },
-    ).exec((err, restaurant) => {
-      if (err) return res.status(500).send({ err });
-      if (!restaurant) return res.status(404).send({ message: 'Invalid restaurant or table' });
-      return res.status(200).send({ restaurant });
-    });
+    { _id: req.params.id, 'tables._id': req.params.tId },
+    { 'tables.$': req.body },
+    { new: true },
+  ).exec((err, restaurant) => {
+    if (err) return res.status(500).send({ err });
+    if (!restaurant) return res.status(404).send({ message: 'Invalid restaurant or table' });
+    return res.status(200).send({ restaurant });
+  });
 };
 
 exports.deleteTables = async (req, res) => {
   // TODO: verify all incoming data
   Restaurant
     .findByIdAndUpdate(
-      req.params.id,
-      { $pull: { tables: { _id: req.params.tId } } },
-    )
+    req.params.id,
+    { $pull: { tables: { _id: req.params.tId } } },
+  )
     .exec((err) => {
       if (err) return res.status(500).send({ err });
       return res.status(204).send({ message: 'deleted' });
