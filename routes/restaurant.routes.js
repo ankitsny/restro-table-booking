@@ -16,8 +16,8 @@ router
   .get(restaurantController.getTables)
   .post(restaurantController.postTables)
   .put(restaurantController.putTables)
-  .patch((req, res) => res.status(200).send('patch'))
-  .delete((req, res) => res.status(200).send('delete'));
+  .patch(restaurantController.patchTables)
+  .delete(restaurantController.deleteTables);
 
 
 module.exports = router;

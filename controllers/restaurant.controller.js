@@ -117,9 +117,29 @@ exports.putTables = async (req, res) => {
 };
 
 exports.patchTables = async (req, res) => {
+  // TODO: verify all incoming data
 
+  Restaurant
+    .findOneAndUpdate(
+      { _id: req.params.id, 'tables._id': req.params.tId },
+      { 'tables.$': req.body },
+      { new: true },
+    ).exec((err, restaurant) => {
+      if (err) return res.status(500).send({ err });
+      if (!restaurant) return res.status(404).send({ message: 'Invalid restaurant or table' });
+      return res.status(200).send({ restaurant });
+    });
 };
 
 exports.deleteTables = async (req, res) => {
-
+  // TODO: verify all incoming data
+  Restaurant
+    .findByIdAndUpdate(
+      req.params.id,
+      { $pull: { tables: { _id: req.params.tId } } },
+    )
+    .exec((err) => {
+      if (err) return res.status(500).send({ err });
+      return res.status(204).send({ message: 'deleted' });
+    });
 };
