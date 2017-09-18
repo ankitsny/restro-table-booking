@@ -11,5 +11,13 @@ router
   .patch(restaurantController.patchRestaurant)
   .delete(restaurantController.deleteRestaurant);
 
+router
+  .route('/id/tables/tId?')
+  .get((req, res) => res.status(200).send('get'))
+  .post((req, res) => res.status(200).send('post'))
+  .put((req, res) => res.status(200).send('put'))
+  .patch((req, res) => res.status(200).send('patch'))
+  .delete((req, res) => res.status(200).send('delete'));
+
 
 module.exports = router;
