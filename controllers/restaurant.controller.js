@@ -21,6 +21,9 @@ exports.getRestaurants = async (req, res) => {
 
 exports.postRestaurant = async (req, res) => {
   // TODO: verify the body, before creating a new record
+  // INFO: delete averageRating and reviewCount, since these props will be auto calculated
+  delete req.body.averageRating;
+  delete req.body.reviewCount;
   new Restaurant(req.body)
     .save((err, restaurant) => {
       if (err) { return res.status(500).send({ err: 'Internal Server Error' }); }
@@ -30,6 +33,9 @@ exports.postRestaurant = async (req, res) => {
 
 exports.putRestaurant = async (req, res) => {
   // TODO: Verify the incoming data
+  // INFO: delete averageRating and reviewCount, since these props will be auto calculated
+  delete req.body.averageRating;
+  delete req.body.reviewCount;
   Restaurant
     .findByIdAndUpdate(req.params.id, req.body, { new: true })
     .exec((err, restaurant) => {
@@ -40,6 +46,9 @@ exports.putRestaurant = async (req, res) => {
 
 exports.patchRestaurant = async (req, res) => {
   // TODO: verify incoming data
+  // INFO: delete restricted props
+  delete req.body.averageRating;
+  delete req.body.reviewCount;
   Restaurant
     .findByIdAndUpdate(req.params.id, req.body, { new: true })
     .exec((err, restaurant) => {
