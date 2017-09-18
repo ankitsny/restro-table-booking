@@ -41,7 +41,7 @@ function normalizePort(val) {
 
   if (parseInt(val, 10) >= 0) {
     // port number
-    return port;
+    return val;
   }
 
   return false;

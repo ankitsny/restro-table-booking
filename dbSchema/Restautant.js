@@ -21,11 +21,21 @@ const restaurantSchema = new mongoose.Schema({
 
   // for reviews we have separate collection
   // its good to store avg rating and review count on restaurant schema itself
-  // it will reduse the db calls to get reviews data from Reviews Collection
+  // it will reduce the db calls to get reviews data from Reviews Collection
   // INFO: also we can store top 5 reviews in Restaurant Schema itself
   averageRating: Number, // This will be auto calculated by the triggers(mongoose middleware)
   reviewCount: Number, // This will be auto calculated by the triggers(mongoose middleware)
 
+});
+
+
+// $text index for search by name, address and cusine
+restaurantSchema.indexes({
+  name: 'text',
+  'address.country': 'text',
+  'address.city': 'text',
+  'address.zipCode': 'text',
+  cuisine: 'text',
 });
 
 module.exports = mongoose.model('Restaurant', restaurantSchema);
