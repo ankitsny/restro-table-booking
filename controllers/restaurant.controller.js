@@ -78,17 +78,42 @@ async function getTables(id, tId) {
 
 
 exports.getTables = async (req, res) => {
+  // TODO: verify all incoming data;
   const { err, tables } = await getTables(req.params.id, req.params.tId || null);
   if (err) return res.status(500).send({ err });
   return res.status(200).send({ tables });
 };
 
 exports.postTables = async (req, res) => {
-
+  // TODO: verify all incoming data;
+  // multiple or single table can be created on one request
+  if (req.body && !Array.isArray(req.body)) req.body = [req.body];
+  Restaurant
+    .findByIdAndUpdate(
+      req.params.id,
+      { $push: { tables: { $each: req.body } } },
+      { new: true },
+    )
+    .exec((err, restaurant) => {
+      if (err) return res.status(500).send({ err });
+      if (!restaurant) return res.status(404).send({ message: 'Invalid Restaurant' });
+      return res.status(200).send({ restaurant });
+    });
 };
 
 exports.putTables = async (req, res) => {
-
+  // TODO: verify all incoming data
+  Restaurant
+    .findOneAndUpdate(
+      { _id: req.params.id, 'tables._id': req.params.tId },
+      { 'tables.$': req.body },
+      { new: true },
+    )
+    .exec((err, restaurant) => {
+      if (err) return res.status(500).send({ err });
+      if (!restaurant) return res.status(404).send({ message: 'Invalid restauranr or table' });
+      return res.status(200).send({ restaurant });
+    });
 };
 
 exports.patchTables = async (req, res) => {

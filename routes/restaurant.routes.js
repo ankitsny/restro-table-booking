@@ -14,8 +14,8 @@ router
 router
   .route('/id/tables/tId?')
   .get(restaurantController.getTables)
-  .post((req, res) => res.status(200).send('post'))
-  .put((req, res) => res.status(200).send('put'))
+  .post(restaurantController.postTables)
+  .put(restaurantController.putTables)
   .patch((req, res) => res.status(200).send('patch'))
   .delete((req, res) => res.status(200).send('delete'));
 
