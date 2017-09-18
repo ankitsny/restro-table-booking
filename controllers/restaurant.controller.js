@@ -28,10 +28,31 @@ exports.postRestaurant = async (req, res) => {
     });
 };
 
-exports.putRestaurant = async (req, res) => res.status(200).send({});
-
-exports.patchRestaurant = async (req, res) => {
-  res.status(200).send({});
+exports.putRestaurant = async (req, res) => {
+  // TODO: Verify the incoming data
+  Restaurant
+    .findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .exec((err, restaurant) => {
+      if (err) return res.status(500).send({ err: 'Internal Server Error' });
+      return res.status(200).send({ restaurant });
+    });
 };
 
-exports.deleteRestaurant = async (req, res) => res.status(200).send({});
+exports.patchRestaurant = async (req, res) => {
+  // TODO: verify incoming data
+  Restaurant
+    .findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .exec((err, restaurant) => {
+      if (err) return res.status(500).send({ err: 'Internal Server Error' });
+      return res.status(200).send({ restaurant });
+    });
+};
+
+exports.deleteRestaurant = async (req, res) => {
+  Restaurant
+    .findByIdAndRemove(req.params.id)
+    .exec((err) => {
+      if (err) return res.status(500).send({ err: 'Internal Server Error' });
+      return res.status(204).send({ message: 'Deleted' });
+    });
+};
