@@ -12,7 +12,7 @@ router
   .delete(restaurantController.deleteRestaurant);
 
 router
-  .route('/id/tables/tId?')
+  .route('/:id/tables/:tId?')
   .get(restaurantController.getTables)
   .post(restaurantController.postTables)
   .put(restaurantController.putTables)
